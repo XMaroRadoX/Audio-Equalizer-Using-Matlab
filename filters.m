@@ -5,7 +5,7 @@ fn = fs/2; % normalized frequency
 type = 'iir'; % to be taken from input part
 
 
-if type == 'iir'
+if type == 'fir'
     % IIR filters
     N = 4; % order of the system
     
