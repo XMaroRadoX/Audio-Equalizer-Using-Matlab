@@ -56,50 +56,49 @@ else
     % FIR filters
     N = 40;
     
-    %0-170
-    coef1 = fir1(N,170/fn);
-    analyze(coef1,1,'40-th order 0-170 Hz FIR LPF');
-   
-    %170-310
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef2 = fir1(N,[170 310]/fn);
-    analyze(coef2,1,'40-th order 170-310 HZ FIR BPF');
+%     %0-170
+%     coef1 = fir1(N,170/fn);
+%     analyze(coef1,1,'40-th order 0-170 Hz FIR LPF');
+%    
+%     %170-310
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef2 = fir1(N,[170 310]/fn);
+%     analyze(coef2,1,'40-th order 170-310 HZ FIR BPF');
        
-    %310-600
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef3 = fir1(N,[310 600]/fn);
-    analyze(coef3,1,'40-th order 310-600 HZ FIR BPF');
+%     %310-600
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef3 = fir1(N,[310 600]/fn);
+%     analyze(coef3,1,'40-th order 310-600 HZ FIR BPF');
 
     %600-1000
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     coef4 = fir1(N,[600 1000]/fn);
     analyze(coef4,1,'40-th order 600-1000 HZ FIR BPF');
     
-    %1-3
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef5 = fir1(N,[1000 3000]/fn);
-    analyze(coef5,1,'40-th order 1-3 KHZ FIR BPF');
-     
-    %3-6
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef6 = fir1(N,[3000 6000]/fn);
-    analyze(coef6,1,'40-th order 3-6 KHZ FIR BPF');
-   
-    %6-12
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef7 = fir1(N,[6000 12000]/fn);
-    analyze(coef7,1,'40-th order 6-12 KHZ FIR BPF');
-     
-    %12-14
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef8 = fir1(N,[12000 14000]/fn);
-    analyze(coef8,1,'40-th order 12-14 KHZ FIR BPF');
-   
-    %14-16
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    coef9 = fir1(N,[14000 16000]/fn);
-    analyze(coef9,1,'40-th order 14-16 KHZ FIR BPF');  
-     
+%     %1-3
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef5 = fir1(N,[1000 3000]/fn);
+%     analyzeFIR(N,fn,fs,coef5,[1000 3000],'40-th order 1-3 KHZ FIR BPF');
+%     
+%     %3-6
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef6 = fir1(N,[3000 6000]/fn);
+%     analyzeFIR(N,fn,fs,coef6,[3000 6000],'40-th order 3-6 KHZ FIR BPF');
+%     
+%     %6-12
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef7 = fir1(N,[6000 12000]/fn);
+%     analyzeFIR(N,fn,fs,coef7,[6000 12000],'40-th order 6-12 KHZ FIR BPF');
+%     
+%     %12-14
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef8 = fir1(N,[12000 14000]/fn);
+%     analyzeFIR(N,fn,fs,coef8,[12000 14000],'40-th order 12-14 KHZ FIR BPF');
+%     
+%     %14-16
+%     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     coef9 = fir1(N,[14000 16000]/fn);
+%     analyzeFIR(N,fn,fs,coef9,[14000 16000],'40-th order 14-16 KHZ FIR BPF');  
 end
 
 
