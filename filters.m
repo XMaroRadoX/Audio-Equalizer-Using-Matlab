@@ -14,9 +14,10 @@ close all
 % analyze('IIR');
 
 %START HERE
-x = audioread('');
-gain = [10 20 30 40 50 60 70 80 90];
+x = audioread('tone.wav');
+gain = [4 -3 -9 -8 1 -4 9 -2 -1];
 y=[];
+type = 'IIR';
 if type == 'IIR'
     y1=filter(iir170,x);
     y1 = y1 .* gain(0);
@@ -161,4 +162,4 @@ func analyze(type)
         % 14-16 KHz band
         fvtool(fir1416k);
     end
-end
+    
