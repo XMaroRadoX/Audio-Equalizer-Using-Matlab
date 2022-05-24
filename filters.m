@@ -15,9 +15,15 @@ load('filters.mat');
 % analyze('sIR');
 Os = 44100;
 %START HERE
+<<<<<<< HEAD
+x = audioread('test.wav');
+gain = [4 -3 -9 -8 1 -4 9 -2 -1];
+y=[];
+=======
 info = audioinfo('Test44100.wav');
 [x,Fs] = audioread('Test44100.wav');
 gain = [4 -10 -9 -8 1 -4 9 -2 -1];
+>>>>>>> 1ed4e4f81eca0e9cb1e5e9251ecf33367b70d39c
 type = 'IIR';
 if type == 'iIR'
     y1=filter(iir170,x);
