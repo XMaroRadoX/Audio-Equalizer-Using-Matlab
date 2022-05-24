@@ -26,7 +26,7 @@ KHz) - ( 12-14 KHz) - ( 14-16 KHz)
 8) Play and save the output wave signal. (you can use wavwrite-sound)
 Outputs/Requirements of project:
 
-# You should submit ONE PDF file contains the followings:
+## You should submit ONE PDF file contains the followings:
 1) Copy of your code.
 2) Different sample runs of code including the following cases:
 a) If design is using FIR filters.
