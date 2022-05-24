@@ -14,7 +14,7 @@ close all
 % analyze('IIR');
 
 %START HERE
-x = audioread('tone.wav');
+x = audioread('test.wav');
 gain = [4 -3 -9 -8 1 -4 9 -2 -1];
 y=[];
 type = 'IIR';
