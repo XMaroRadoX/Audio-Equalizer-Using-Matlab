@@ -17,9 +17,9 @@ Os = 44100;
 %START HERE
 info = audioinfo('Test44100.wav');
 [x,Fs] = audioread('Test44100.wav');
-gains = [4 -10 -9 -8 1 -4 9 -2 -1];
+gain = [4 -10 -9 -8 1 -4 9 -2 -1];
 type = 'IIR';
-if type == 'IIR'
+if type == 'iIR'
     y1=filter(iir170,x);
     analyseFilter(y1,x,info,'0-170 Hz IIR Filter');
     y1 = y1 .* db2mag(gain(1));
@@ -119,15 +119,16 @@ plot(Fvec,abs(Y));grid;
 title('Magnitude spectrum');
 xlabel('Frequency (Hz)');
 ylabel('|Y(\omega)|');
+xlim([-3,3]);
 
 subplot(3,2,6);
 plot(Fvec,angle(Y).*180/pi);grid;
 title('Phase spectrum');
 xlabel('Frequency (Hz)');
 ylabel('Phase (degree)');
+xlim([-3,3]);
 
-
-sound(y,Fs);
+% sound(y,Fs);
 audiowrite('composite.wav',x,Os);
 
 
@@ -157,12 +158,14 @@ plot(Fvec,abs(Y));grid;
 title('Magnitude spectrum');
 xlabel('Frequency (Hz)');
 ylabel('|Y(\omega)|');
+xlim([-3,3]);
 
 subplot(3,2,6);
 plot(Fvec,angle(Y).*180/pi);grid;
 title('Phase spectrum');
 xlabel('Frequency (Hz)');
 ylabel('Phase (degree)');
+xlim([-3,3]);
 
 % Decreasing Fs to half
 fs = Fs/2;
@@ -189,13 +192,14 @@ plot(Fvec,abs(Y));grid;
 title('Magnitude spectrum');
 xlabel('Frequency (Hz)');
 ylabel('|Y(\omega)|');
+xlim([-3,3]);
 
 subplot(3,2,6);
 plot(Fvec,angle(Y).*180/pi);grid;
 title('Phase spectrum');
 xlabel('Frequency (Hz)');
 ylabel('Phase (degree)');
-
+xlim([-3,3]);
 
 
 
@@ -232,12 +236,14 @@ function analyseFilter(y,x,info,name)
     title('Magnitude spectrum');
     xlabel('Frequency (Hz)');
     ylabel('|Y(\omega)|');
+    xlim([-3,3]);
     
     subplot(3,2,6);
     plot(Fvec,angle(Y).*180/pi);grid;
     title('Phase spectrum');
     xlabel('Frequency (Hz)');
     ylabel('Phase (degree)');
+    xlim([-3,3]);
 end
 
     
