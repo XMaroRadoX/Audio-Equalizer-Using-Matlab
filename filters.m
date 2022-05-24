@@ -1,7 +1,8 @@
 clc
-
-clc
 close all
+
+cd 'W:\Projects\Digital Signal Processing\Audio_equalizer_using_matlab'
+load('filters.mat');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % To load filters in workspace %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11,155 +12,335 @@ close all
 
 
 % Analysis function
-% analyze('IIR');
-
+% analyze('sIR');
+Os = 44100;
 %START HERE
-x = audioread('tone.wav');
-gain = [4 -3 -9 -8 1 -4 9 -2 -1];
-y=[];
+info = audioinfo('Test44100.wav');
+[x,Fs] = audioread('Test44100.wav');
+gains = [4 -10 -9 -8 1 -4 9 -2 -1];
 type = 'IIR';
 if type == 'IIR'
     y1=filter(iir170,x);
-    y1 = y1 .* gain(0);
-    y = [y y1];
+    analyseFilter(y1,x,info,'0-170 Hz IIR Filter');
+    y1 = y1 .* db2mag(gain(1));
     
     y2=filter(iir170310,x);
-    y2 = y2 .* gain(1);
-    y = [y y2];
+    analyseFilter(y2,x,info,'170-310 Hz IIR Filter');
+    y2 = y2 .* db2mag(gain(2));
     
     y3=filter(iir310600,x);
-    y3 = y3 .* gain(2);
-    y = [y y3];
-    
+    analyseFilter(y3,x,info,'310-600 Hz IIR Filter');
+    y3 = y3 .* db2mag(gain(3));
+   
     y4=filter(iir6001000,x);
-    y4 = y4 .* gain(3);
-    y = [y y4];
+    analyseFilter(y4,x,info,'600-1000 Hz IIR Filter');
+    y4 = y4 .* db2mag(gain(4));
     
     y5=filter(iir13k,x);
-    y5 = y5 .* gain(4);
-    y = [y y5];
+    analyseFilter(y5,x,info,'1-3 KHz IIR Filter');
+    y5 = y5 .* db2mag(gain(5));
     
     y6=filter(iir36k,x);
-    y6 = y6 .* gain(5);
-    y = [y y6];
+    analyseFilter(y6,x,info,'3-6 KHz IIR Filter');
+    y6 = y6 .* db2mag(gain(6));
     
     y7=filter(iir612k,x);
-    y7 = y7 .* gain(6);
-    y = [y y7];
+    analyseFilter(y7,x,info,'6-12 KHz IIR Filter');
+    y7 = y7 .* db2mag(gain(7));
     
     y8=filter(iir1214k,x);
-    y8 = y8 .* gain(7);
-    y = [y y8];
+    analyseFilter(y8,x,info,'12-14 KHz IIR Filter');
+    y8 = y8 .* db2mag(gain(8));
     
-    y9=filter(iir1416,x);
-    y9 = y9 .* gain(8);
-    y = [y y9];
+    y9=filter(iir1416k,x);
+    analyseFilter(y9,x,info,'14-16 KHz IIR Filter');
+    y9 = y9 .* db2mag(gain(9));
+
 else
     y1=filter(fir170,x);
-    y1 = y1 .* gain(0);
-    y = [y y1];
+    analyseFilter(y1,x,info,'0-170 Hz FIR Filter');
+    y1 = y1 .* db2mag(gain(1));
     
     y2=filter(fir170310,x);
-    y2 = y2 .* gain(1);
-    y = [y y2];
+    analyseFilter(y2,x,info,'170-310 Hz FIR Filter');
+    y2 = y2 .* db2mag(gain(2));
     
     y3=filter(fir310600,x);
-    y3 = y3 .* gain(2);
-    y = [y y3];
-    
+    analyseFilter(y3,x,info,'310-600 Hz FIR Filter');
+    y3 = y3 .* db2mag(gain(3));
+   
     y4=filter(fir6001000,x);
-    y4 = y4 .* gain(3);
-    y = [y y4];
+    analyseFilter(y4,x,info,'600-1000 Hz FIR Filter');
+    y4 = y4 .* db2mag(gain(4));
     
     y5=filter(fir13k,x);
-    y5 = y5 .* gain(4);
-    y = [y y5];
+    analyseFilter(y5,x,info,'1-3 KHz FIR Filter');
+    y5 = y5 .* db2mag(gain(5));
     
     y6=filter(fir36k,x);
-    y6 = y6 .* gain(5);
-    y = [y y6];
+    analyseFilter(y6,x,info,'3-6 KHz FIR Filter');
+    y6 = y6 .* db2mag(gain(6));
     
     y7=filter(fir612k,x);
-    y7 = y7 .* gain(6);
-    y = [y y7];
+    analyseFilter(y7,x,info,'6-12 KHz FIR Filter');
+    y7 = y7 .* db2mag(gain(7));
     
     y8=filter(fir1214k,x);
-    y8 = y8 .* gain(7);
-    y = [y y8];
+    analyseFilter(y8,x,info,'12-14 KHz FIR Filter');
+    y8 = y8 .* db2mag(gain(8));
     
-    y9=filter(fir1416,x);
-    y9 = y9 .* gain(8);
-    y = [y y9];
+    y9=filter(fir1416k,x);
+    analyseFilter(y9,x,info,'14-16 KHz FIR Filter');
+    y9 = y9 .* db2mag(gain(9));
 end
-subplot(2,1,1);
-x1 = fftshift(fft(x));
-plot(x1);
-subplot(2,1,2);
-yf = fftshift(fft(y));
-plot(yf);
 
+y = y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8 + y9;
+% output of composite
+idx = 1:info.TotalSamples;
+t = (idx-1)./Fs;
+Fvec = linspace(-Fs/2,Fs/2,length(t));
+Y = fftshift(fft(y));
+    
+figure('name','Composite Signal');
+subplot(3,2,[1 2]);
+plot(t,x);grid;
+title('Original Signal (Time domain)');
+xlabel('Time (seconds)');
+ylabel('x(t)');
+
+subplot(3,2,[3 4]);
+plot(t,y);grid;
+title('Composite Signal (Time domain)');
+xlabel('Time (seconds)');
+ylabel('x(t)');
+
+subplot(3,2,5);
+plot(Fvec,abs(Y));grid;
+title('Magnitude spectrum');
+xlabel('Frequency (Hz)');
+ylabel('|Y(\omega)|');
+
+subplot(3,2,6);
+plot(Fvec,angle(Y).*180/pi);grid;
+title('Phase spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Phase (degree)');
+
+
+sound(y,Fs);
+audiowrite('composite.wav',x,Os);
+
+
+
+% Doubling Fs
+fs = Fs*2;
+idx = 1:info.TotalSamples;
+t = (idx-1)./fs;
+Fvec = linspace(-fs/2,fs/2,length(t));
+Y = fftshift(fft(y));
+    
+figure('name','Double Sampling');
+subplot(3,2,[1 2]);
+plot(t,x);grid;
+title('Original Signal (Time domain)');
+xlabel('Time (seconds)');
+ylabel('x(t)');
+
+subplot(3,2,[3 4]);
+plot(t,y);grid;
+title('Composite Signal (Time domain)');
+xlabel('Time (seconds)');
+ylabel('x(t)');
+
+subplot(3,2,5);
+plot(Fvec,abs(Y));grid;
+title('Magnitude spectrum');
+xlabel('Frequency (Hz)');
+ylabel('|Y(\omega)|');
+
+subplot(3,2,6);
+plot(Fvec,angle(Y).*180/pi);grid;
+title('Phase spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Phase (degree)');
+
+% Decreasing Fs to half
+fs = Fs/2;
+idx = 1:info.TotalSamples;
+t = (idx-1)./fs;
+Fvec = linspace(-fs/2,fs/2,length(t));
+Y = fftshift(fft(y));
+    
+figure('name','Half sampling');
+subplot(3,2,[1 2]);
+plot(t,x);grid;
+title('Original Signal (Time domain)');
+xlabel('Time (seconds)');
+ylabel('x(t)');
+
+subplot(3,2,[3 4]);
+plot(t,y);grid;
+title('Composite Signal (Time domain)');
+xlabel('Time (seconds)');
+ylabel('x(t)');
+
+subplot(3,2,5);
+plot(Fvec,abs(Y));grid;
+title('Magnitude spectrum');
+xlabel('Frequency (Hz)');
+ylabel('|Y(\omega)|');
+
+subplot(3,2,6);
+plot(Fvec,angle(Y).*180/pi);grid;
+title('Phase spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Phase (degree)');
+
+
+
+
+ 
+% filtered signals analysis
+function analyseFilter(y,x,info,name)
+    Fs = info.SampleRate;
+    idx = 1:info.TotalSamples;
+    t = (idx-1)./Fs;
+    Fvec = linspace(-Fs/2,Fs/2,length(t));
+    Y = fftshift(fft(y));
+    
+    figure('name',name);
+    subplot(3,2,[1 2]);
+    plot(t,x);grid;
+    title('Original Signal (Time domain)');
+    xlabel('Time (seconds)');
+    ylabel('x(t)');
+    
+    subplot(3,2,3);
+    plot(t,y);grid;
+    title('Filtered Signal (Time domain)');
+    xlabel('Time (seconds)');
+    ylabel('y(t)');
+    
+    subplot(3,2,4);
+    plot(Fvec,Y);grid;
+    title('Filtered Signal (Frequency domain)');
+    xlabel('Frequency (Hz)');
+    ylabel('Y(\omega)');
+    
+    subplot(3,2,5);
+    plot(Fvec,abs(Y));grid;
+    title('Magnitude spectrum');
+    xlabel('Frequency (Hz)');
+    ylabel('|Y(\omega)|');
+    
+    subplot(3,2,6);
+    plot(Fvec,angle(Y).*180/pi);grid;
+    title('Phase spectrum');
+    xlabel('Frequency (Hz)');
+    ylabel('Phase (degree)');
+end
+
+    
 % filters' analysis function
-func analyze(type)
+function analyze(type)
     cd 'W:\Projects\Digital Signal Processing\Audio_equalizer_using_matlab'
     load('filters.mat');
     
     if type == 'IIR'
         % IIR Analysis
         % 0-170 Hz band
-        fvtool(iir170);
+        analysis(iir170,'4-th order 0-170 Hz BPF');
 
         % 170-310 Hz band
-        fvtool(iir170310);
+        analysis(iir170310,'4-th order 170-310 Hz BPF');
 
         % 310-600 Hz band
-        fvtool(iir310600);
+        analysis(iir310600,'4-th order 310-600 Hz BPF');
 
         % 600-1000 Hz band
-        fvtool(iir6001000);
+        analysis(iir6001000,'4-th order 600-1000 Hz BPF');
 
         % 1-3 KHz band
-        fvtool(iir13k);
+        analysis(iir13k,'4-th order 1-3 KHz BPF');
 
         % 3-6 KHz band
-        fvtool(iir36k);
+        analysis(iir36k,'4-th order 3-6 KHz BPF');
 
         % 6-12 KHz band
-        fvtool(iir612k);
+        analysis(iir612k,'4-th order 6-12 KHz BPF');
 
         % 12-14 KHz band
-        fvtool(iir1214k);
+        analysis(iir1214k,'4-th order 12-14 KHz BPF');
 
         % 14-16 KHz band
-        fvtool(iir1416k);
+        analysis(iir1416k,'4-th order 14-16 KHz BPF');
         
     else
         
         % FIR Analysis
         % 0-170 Hz band
-        fvtool(fir170);
+        analysis(fir170,'800-th order 0-170 Hz BPF');
 
         % 170-310 Hz band
-        fvtool(fir170310);
+        analysis(fir170310,'800-th order 170-310 Hz BPF');
 
         % 310-600 Hz band
-        fvtool(fir310600);
+        analysis(fir310600,'800-th order 310-600 Hz BPF');
 
         % 600-1000 Hz band
-        fvtool(fir6001000);
+        analysis(fir6001000,'800-th order 600-1000 Hz BPF');
 
         % 1-3 KHz band
-        fvtool(fir13k);
+        analysis(fir13k,'800-th order 1-3 KHz BPF');
 
         % 3-6 KHz band
-        fvtool(fir36k);
+        analysis(fir36k,'800-th order 3-6 KHz BPF');
 
         % 6-12 KHz band
-        fvtool(fir612k);
+        analysis(fir612k,'800-th order 6-12 KHz BPF');
 
         % 12-14 KHz band
-        fvtool(fir1214k);
+        analysis(fir1214k,'800-th order 12-14 KHz BPF');
 
         % 14-16 KHz band
-        fvtool(fir1416k);
+        analysis(fir1416k,'800-th order 14-16 KHz BPF');
     end
+end
+
+function analysis(filter,name)
+    figure('name',name);
+   
+    [H,wh] = freqz(filter);
+    subplot(4,2,1);
+    plot(wh/pi,abs(H));grid;
+    title('Magnitude response');
+    xlabel('Normalized frequency (\times\pi rad/samples)');
+    ylabel('Magnitude');
     
+    [P,wp] = phasez(filter);
+    subplot(4,2,2);
+    plot(wp/pi,P.*180/pi);grid;
+    title('Phase response');
+    xlabel('Normalized frequency (\times\pi rad/samples)');
+    ylabel('Phase (Degrees)');
+   
+    [h,nh] = impz(filter);
+    subplot(4,2,[3 4]);
+    stem(nh,h);grid;
+    title('Impulse response');
+    xlabel('Samples');
+    ylabel('Amplitude');
+    
+    [s,ns] = stepz(filter);
+    subplot(4,2,[5 6]);
+    stem(ns,s);grid;
+    title('Step response');
+    xlabel('Samples');
+    ylabel('Amplitude');
+   
+    subplot(4,2,[7 8]);
+    [b,a] = tf(filter);
+    zplane(b,a);grid;
+    title('Pole-Zero plot');
+    
+end
