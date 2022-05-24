@@ -1,27 +1,40 @@
 clc
 close all
-
-cd 'W:\Projects\Digital Signal Processing\Audio_equalizer_using_matlab'
-load('filters.mat');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % To load filters in workspace %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % cd 'project location'        %
 % load('filters.mat')          % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd 'W:\Projects\Digital Signal Processing\Audio_equalizer_using_matlab'
+load('filters.mat');
 
+%get wave file
+[file,path] = uigetfile('*.wav');
+info = audioinfo(file);
+[x,Fs] = audioread(file);
+%gain for each band
+gain = [];
+g = inputdlg({'Enter the gain for 0-170 Hz band (in db)','Enter the gain for 170-310 Hz band (in db)','Enter the gain for 310-600 Hz band (in db)','Enter the gain for 600-1000 Hz band (in db)','Enter the gain for 1-3 KHz band (in db)','Enter the gain for 3-6 KHz band (in db)','Enter the gain for 6-12 KHz band (in db)','Enter the gain for 12-14 KHz band (in db)','Enter the gain for 14-16 KHz band (in db)'},...
+              'Amplification and Attenuation',[1 55]);
+for i = 1:9
+    gain = [gain str2double(g{i})];
+end
 
+%type of filter
+index = listdlg('PromptString',{'Choose the type of filters'},...
+    'SelectionMode','single','ListString',{'IIR','FIR'});
+
+if index == 1
+    type = 'IIR';
+else type = 'FIR';
+end
+
+Os = str2double(inputdlg({'Enter output sampling rate (in Hz)'})); %output sample rate
+ 
 % Analysis function
-% analyze('sIR');
-Os = 44100;
-%START HERE
-x = audioread('test.wav');
-gain = [4 -3 -9 -8 1 -4 9 -2 -1];
-y=[];
-info = audioinfo('Test44100.wav');
-[x,Fs] = audioread('Test44100.wav');
-gain = [4 -10 -9 -8 1 -4 9 -2 -1];
-type = 'IIR';
+% analyze('IIR');
+
 if type == 'iIR'
     y1=filter(iir170,x);
     analyseFilter(y1,x,info,'0-170 Hz IIR Filter');
@@ -100,8 +113,8 @@ end
 y = y1 + y2 + y3 + y4 + y5 + y6 + y7 + y8 + y9;
 % output of composite
 idx = 1:info.TotalSamples;
-t = (idx-1)./Fs;
-Fvec = linspace(-Fs/2,Fs/2,length(t));
+t = (idx-1)./Os;
+Fvec = linspace(-Os/2,Os/2,length(t));
 Y = fftshift(fft(y));
     
 figure('name','Composite Signal');
@@ -131,13 +144,13 @@ xlabel('Frequency (Hz)');
 ylabel('Phase (degree)');
 xlim([-3,3]);
 
-% sound(y,Fs);
+% sound(y,Os);
 audiowrite('composite.wav',x,Os);
 
 
 
 % Doubling Fs
-fs = Fs*2;
+fs = Os*2;
 idx = 1:info.TotalSamples;
 t = (idx-1)./fs;
 Fvec = linspace(-fs/2,fs/2,length(t));
@@ -171,7 +184,7 @@ ylabel('Phase (degree)');
 xlim([-3,3]);
 
 % Decreasing Fs to half
-fs = Fs/2;
+fs = Os/2;
 idx = 1:info.TotalSamples;
 t = (idx-1)./fs;
 Fvec = linspace(-fs/2,fs/2,length(t));
