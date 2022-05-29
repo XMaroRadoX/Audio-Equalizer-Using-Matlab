@@ -35,7 +35,7 @@ Os = str2double(inputdlg({'Enter output sampling rate (in Hz)'})); %output sampl
 % Analysis function
 % analyze('IIR');
 
-if type == 'iIR'
+if type == 'IIR'
     y1=filter(iir170,x);
     analyseFilter(y1,x,info,'0-170 Hz IIR Filter');
     y1 = y1 .* db2mag(gain(1));
